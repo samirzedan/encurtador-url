@@ -5,6 +5,7 @@ import com.samirdev.encurtador_url.dto.Url.UrlResponseDTO;
 import com.samirdev.encurtador_url.model.Url;
 import com.samirdev.encurtador_url.repository.UrlRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
@@ -44,6 +45,13 @@ public class UrlService {
         Url url = urlRepository.findByHash(hash)
                 .orElseThrow(() -> new RuntimeException("URL not found!"));
         urlRepository.delete(url);
+    }
+
+    public void incrementAccessCount(String hash) {
+        int updated = urlRepository.incrementAccessCount(hash);
+        if (updated == 0) {
+            throw new RuntimeException("URL not found!");
+        }
     }
 
     private UrlResponseDTO toResponse(Url url) {

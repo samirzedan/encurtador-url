@@ -39,4 +39,10 @@ public class UrlController {
         urlService.delete(hash);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/access-sum/{hash}")
+    public ResponseEntity<Void> accessSum(@PathVariable String hash) {
+        urlService.incrementAccessCount(hash);
+        return ResponseEntity.noContent().build();
+    }
 }
