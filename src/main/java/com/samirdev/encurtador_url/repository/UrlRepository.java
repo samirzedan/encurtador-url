@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface UrlRepository extends JpaRepository<Url, Long> {
     Optional<Url> findByHash(String hash);
 
-    @Query("SELECT u.originalUrl FROM Url u WHERE u.hash = :hash AND u.expiresAt > :dateTime")
+    @Query("SELECT u.originalUrl FROM Url u WHERE u.hash = :hash AND (u.expiresAt > :dateTime OR u.expiresAt IS NULL)")
     Optional<String> findByHashAndExpiresAtAfter(@Param("hash") String hash, @Param("dateTime") LocalDateTime dateTime);
 
     @Transactional
