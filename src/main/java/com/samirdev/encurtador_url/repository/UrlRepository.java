@@ -7,10 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface UrlRepository extends JpaRepository<Url, Long> {
     Optional<Url> findByHash(String hash);
+
+    @Query("SELECT u.originalUrl FROM Url u WHERE u.hash = :hash AND u.expiresAt > :dateTime")
+    Optional<String> findByHashAndExpiresAtAfter(@Param("hash") String hash, @Param("dateTime") LocalDateTime dateTime);
 
     @Transactional
     @Modifying

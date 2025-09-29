@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>com.samirdev</groupId>
 	<artifactId>encurtador-url</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>encurtador-url</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Encurtador de URLs</description>
 	<url/>
 	<licenses>
 		<license/>

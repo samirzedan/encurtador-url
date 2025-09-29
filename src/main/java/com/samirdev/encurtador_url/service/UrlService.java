@@ -54,6 +54,11 @@ public class UrlService {
         }
     }
 
+    public String getOriginalUrl(String hash) {
+        return urlRepository.findByHashAndExpiresAtAfter(hash, LocalDateTime.now())
+                .orElseThrow(() -> new RuntimeException("URL not found!"));
+    }
+
     private UrlResponseDTO toResponse(Url url) {
         UrlResponseDTO response = new UrlResponseDTO();
         response.setHash(url.getHash());

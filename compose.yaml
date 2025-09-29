@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: db_encurtador
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: db_encurtador
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: always
+volumes:
+  db_data:
