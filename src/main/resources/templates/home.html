@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encurtador de URLs</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+</head>
+<body>
+<div class="container">
+    <h1>📎 Encurtador de URLs</h1>
+
+    <div class="input-section">
+        <div class="error-message" id="errorMessage"></div>
+
+        <form id="linkForm" class="input-group">
+            <input
+                    type="url"
+                    id="linkInput"
+                    placeholder="Cole seu link aqui (ex: https://exemplo.com)"
+                    required
+            >
+            <button type="submit">Adicionar</button>
+        </form>
+    </div>
+
+    <div class="links-section">
+        <h2 class="section-title">Seus Links Salvos</h2>
+        <ul class="links-list" id="linksList">
+            <li class="empty-state">
+                Nenhum link adicionado ainda. Adicione seu primeiro link acima! 🚀
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    let links = []; // Lista de links com original e encurtado
+
+    const linkForm = document.getElementById('linkForm');
+    const linkInput = document.getElementById('linkInput');
+    const linksList = document.getElementById('linksList');
+    const errorMessage = document.getElementById('errorMessage');
+
+    // Função de validação de URL
+    function isValidUrl(string) {
+        try {
+            new URL(string);
+            return true;
+        } catch (_) {
+            return false;
+        }
+    }
+
+    // Mostra mensagens de erro
+    function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+        setTimeout(() => {
+            errorMessage.style.display = 'none';
+        }, 4000);
+    }
+
+    // Função para adicionar link via backend
+    async function addLink(url) {
+        if (!isValidUrl(url)) {
+            showError('Por favor, insira um link válido (deve começar com http:// ou https://)');
+            return false;
+        }
+
+        if (links.some(link => link.original === url)) {
+            showError('Este link já foi adicionado à lista!');
+            return false;
+        }
+
+        try {
+            const response = await fetch('https://encurtador-url.samirdev.com.br/urls', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ originalUrl: url })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erro ao criar link: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            // Adiciona no array local o link original e encurtado
+            links.push({
+                original: data.originalUrl,
+                shortened: `https://encurtador-url.samirdev.com.br/${data.hash}`
+            });
+
+            renderLinks();
+            return true;
+        } catch (error) {
+            showError('Falha ao criar link: ' + error.message);
+            return false;
+        }
+    }
+
+    // Remove link da lista
+    function removeLink(index) {
+        links.splice(index, 1);
+        renderLinks();
+    }
+
+    // Renderiza a lista de links
+    function renderLinks() {
+        if (links.length === 0) {
+            linksList.innerHTML = `
+                <li class="empty-state">
+                    Nenhum link adicionado ainda. Adicione seu primeiro link acima! 🚀
+                </li>
+            `;
+            return;
+        }
+
+        linksList.innerHTML = links.map((link, index) => `
+            <li class="link-item">
+                <a href="${link.original}" target="_blank" rel="noopener noreferrer" class="link-text">
+                    ${link.original}
+                </a>
+                <span> → </span>
+                <a href="${link.shortened}" target="_blank" rel="noopener noreferrer" class="link-text">
+                    ${link.shortened}
+                </a>
+                <button class="remove-btn" onclick="removeLink(${index})">
+                    Remover
+                </button>
+            </li>
+        `).join('');
+    }
+
+    // Evento do formulário
+    linkForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const url = linkInput.value.trim();
+
+        if (!url) {
+            showError('Por favor, insira um link!');
+            return;
+        }
+
+        addLink(url).then(success => {
+            if (success) {
+                linkInput.value = '';
+                linkInput.focus();
+            }
+        });
+    });
+
+    // Foco inicial no input
+    linkInput.focus();
+</script>
+</body>
+</html>
