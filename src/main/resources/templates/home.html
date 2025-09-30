@@ -102,12 +102,6 @@
         }
     }
 
-    // Remove link da lista
-    function removeLink(index) {
-        links.splice(index, 1);
-        renderLinks();
-    }
-
     // Renderiza a lista de links
     function renderLinks() {
         if (links.length === 0) {
@@ -121,16 +115,14 @@
 
         linksList.innerHTML = links.map((link, index) => `
             <li class="link-item">
-                <a href="${link.original}" target="_blank" rel="noopener noreferrer" class="link-text">
-                    ${link.original}
-                </a>
-                <span> → </span>
-                <a href="${link.shortened}" target="_blank" rel="noopener noreferrer" class="link-text">
-                    ${link.shortened}
-                </a>
-                <button class="remove-btn" onclick="removeLink(${index})">
-                    Remover
-                </button>
+                <div class="link-group">
+                    <a href="${link.original}" target="_blank" rel="noopener noreferrer" class="link-text original">
+                        ${link.original}
+                    </a>
+                    <a href="${link.shortened}" target="_blank" rel="noopener noreferrer" class="link-text shortened">
+                        ${link.shortened}
+                    </a>
+                </div>
             </li>
         `).join('');
     }

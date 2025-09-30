@@ -99,33 +99,44 @@ button:active {
 }
 
 .link-item {
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 10px;
-    padding: 15px 20px;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: all 0.3s ease;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  padding: 15px 20px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* alinha no topo */
+  transition: all 0.3s ease;
 }
 
 .link-item:hover {
-    background: #e9ecef;
-    transform: translateX(5px);
+  background: #e9ecef;
+  transform: translateX(5px);
+}
+
+.link-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-right: 15px;
 }
 
 .link-text {
-    color: #667eea;
-    text-decoration: none;
-    font-weight: 500;
-    word-break: break-all;
-    flex: 1;
-    margin-right: 15px;
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  word-break: break-all;
 }
 
 .link-text:hover {
-    text-decoration: underline;
+  text-decoration: underline;
+}
+
+.link-text.shortened {
+  font-size: 0.9em;
+  color: #495057;
+  margin-top: 5px;
 }
 
 .remove-btn {
