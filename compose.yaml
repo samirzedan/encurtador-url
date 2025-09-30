@@ -7,6 +7,7 @@ services:
     depends_on:
       - db
     environment:
+      - ACTIVE_PROFILE=default
       - DATABASE_URL=jdbc:postgresql://db:5432/${POSTGRES_DB}
       - DATABASE_USER=${POSTGRES_USER}
       - DATABASE_PASSWORD=${POSTGRES_PASSWORD}
