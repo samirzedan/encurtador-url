@@ -11,6 +11,7 @@
 | GET    | /urls/{hash}    | Retorna detalhes de uma URL |
 | DELETE | /urls/{hash}    | Remove uma URL              |
 | GET    | /{hash}         | Redireciona para a URL original |
+| GET    | /               | Frontend                    |
 
 ---
 
