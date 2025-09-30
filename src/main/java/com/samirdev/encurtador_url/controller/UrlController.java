@@ -4,6 +4,7 @@ import com.samirdev.encurtador_url.dto.Url.UrlRequestDTO;
 import com.samirdev.encurtador_url.dto.Url.UrlResponseDTO;
 import com.samirdev.encurtador_url.service.UrlService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +31,11 @@ public class UrlController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UrlResponseDTO>> index() {
-        return ResponseEntity.ok(urlService.list());
+    public ResponseEntity<Page<UrlResponseDTO>> index(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(urlService.list(page, size));
     }
 
     @DeleteMapping("/{hash}")

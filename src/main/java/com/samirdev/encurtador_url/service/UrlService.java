@@ -4,8 +4,11 @@ import com.samirdev.encurtador_url.dto.Url.UrlRequestDTO;
 import com.samirdev.encurtador_url.dto.Url.UrlResponseDTO;
 import com.samirdev.encurtador_url.model.Url;
 import com.samirdev.encurtador_url.repository.UrlRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
@@ -37,8 +40,9 @@ public class UrlService {
         return toResponse(url);
     }
 
-    public List<UrlResponseDTO> list() {
-        return urlRepository.findAll().stream().map(this::toResponse).toList();
+    public Page<UrlResponseDTO> list(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        return urlRepository.findAll(pageable).map(this::toResponse);
     }
 
     public void delete(String hash) {
